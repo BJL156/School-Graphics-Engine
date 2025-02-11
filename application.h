@@ -4,6 +4,7 @@
 #include "framebuffer.h"
 #include "ansiUtilities.h"
 #include "rasterizer.h"
+#include "uniformBuffer.h"
 #include "debugUtilities.h"
 
 #include "mat4.h"
@@ -18,7 +19,7 @@ public:
 
     void run();
 private:
-    Framebuffer m_framebuffer{ 64, 16.0 / 9.0 };
+    Framebuffer m_framebuffer{ 32, 16.0 / 9.0 };
     Rasterizer m_rasterizer{ m_framebuffer };
 };
 

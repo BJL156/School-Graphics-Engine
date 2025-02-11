@@ -5,6 +5,7 @@
 #include "ansiUtilities.h"
 
 #include <cstdint>
+#include <limits>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -19,7 +20,8 @@ public:
     void setPixel(
         const std::uint32_t &x,
         const std::uint32_t &y,
-        const Vec3 &color);
+        const Vec3 &color,
+        double depth);
 
     void clear();
     void present();
@@ -27,7 +29,8 @@ public:
     const std::uint32_t getWidth() const;
     const std::uint32_t getHeight() const;
 private:
-    void createColorAttachment();
+    void createColorAttachment(const std::uint32_t &pixelCount);
+    void createDepthBuffer(const std::uint32_t &pixelCount);
 
     std::uint32_t getCorrectedHeight(
         const std::uint32_t &width,
@@ -39,6 +42,7 @@ private:
     Vec3 m_clearColor = { 0.1, 0.1, 0.1 };
 
     std::vector<Vec3> m_colorAttachment;
+    std::vector<double> m_depthBuffer;
 };
 
 #endif

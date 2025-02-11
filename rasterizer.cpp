@@ -11,18 +11,24 @@ Rasterizer::~Rasterizer() {
 
 void Rasterizer::drawTriangle(
     const std::vector<Vec3> &vertices,
-    std::function<Vec3(const Vec3 &, const Vec3 &, const Uniforms &)> fragmentShader,
-    const Uniforms &uniforms) {
+    std::function<Vec3(const Vec3 &, const UniformBuffer &)> vertexShader,
+    std::function<Vec3(const Vec3 &, const Vec3 &, const UniformBuffer &)> fragmentShader,
+    const UniformBuffer &uniformBuffer) {
     if (vertices.size() != 3) {
         throw std::runtime_error("Triangles must have 3 vertices.");
+    }
+
+    std::vector<Vec3> transformedVertices = vertices;
+    for (std::size_t i = 0; i < transformedVertices.size(); ++i) {
+        transformedVertices[i] = vertexShader(vertices[i], uniformBuffer);
     }
 
     const std::uint32_t width = m_framebuffer.getWidth();
     const std::uint32_t height = m_framebuffer.getHeight();
 
-    std::vector<Vec3> ssVertices(vertices.size());
-    for (std::size_t i = 0; i < vertices.size(); ++i) {
-        ssVertices[i] = ndc2ScreenSpace(vertices[i], width, height);
+    std::vector<Vec3> ssVertices(transformedVertices.size());
+    for (std::size_t i = 0; i < transformedVertices.size(); ++i) {
+        ssVertices[i] = ndc2ScreenSpace(transformedVertices[i], width, height);
     }
 
     int minX = static_cast<int>(clamp(std::floor(std::min({ ssVertices[0].x, ssVertices[1].x, ssVertices[2].x })), 0.0, width - 1));
@@ -45,8 +51,19 @@ void Rasterizer::drawTriangle(
                 ssVertices[2]);
 
             if (pointInTriangle(currentPixel, barycentric)) {
-                Vec3 color = fragmentShader(barycentric, currentPixel, uniforms);
-                m_framebuffer.setPixel(currentPixel.x, currentPixel.y, color);
+                Vec3 color = fragmentShader(barycentric, currentPixel, uniformBuffer);
+
+                double depth = getInterpolation(
+                    transformedVertices[0].z,
+                    transformedVertices[1].z,
+                    transformedVertices[2].z,
+                    barycentric).z;
+
+                m_framebuffer.setPixel(
+                    currentPixel.x,
+                    currentPixel.y,
+                    color,
+                    depth);
             }
         }
     }

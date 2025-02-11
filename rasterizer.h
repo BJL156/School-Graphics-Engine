@@ -3,16 +3,11 @@
 
 #include "vec3.h"
 #include "framebuffer.h"
+#include "uniformBuffer.h"
 
 #include <vector>
 #include <functional>
 #include <cstdint>
-
-struct Uniforms {
-    std::uint32_t width;
-    std::uint32_t height;
-    std::uint32_t frameCount;
-};
 
 class Rasterizer {
 public:
@@ -21,8 +16,9 @@ public:
 
     void drawTriangle(
         const std::vector<Vec3> &vertices,
-        std::function<Vec3(const Vec3 &, const Vec3 &, const Uniforms &)> fragmentShader,
-        const Uniforms &uniforms);
+        std::function<Vec3(const Vec3 &, const UniformBuffer &)> vertexShader,
+        std::function<Vec3(const Vec3 &, const Vec3 &, const UniformBuffer &)> fragmentShader,
+        const UniformBuffer &uniformBuffer);
 private:
     bool pointInTriangle(const Vec3 &point, const Vec3 &barycentric);
 

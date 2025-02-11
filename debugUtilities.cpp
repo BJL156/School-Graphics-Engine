@@ -1,5 +1,19 @@
 #include "debugUtilities.h"
 
+void printWelcomeMessage(const Framebuffer &framebuffer) {
+    char chr = '#';
+
+    for (std::uint32_t y = 0; y < framebuffer.getHeight(); ++y) {
+        for (std::uint32_t x = 0; x < framebuffer.getWidth(); ++x) {
+            std::cout << chr << chr;
+        }
+        std::cout << '\n';
+    }
+
+    std::cout << "Resize until the " << chr << "s create a rectangle. Then hold enter.\n";
+    std::cin.get();
+}
+
 void printDebugMessage() {
     static std::uint32_t frameCount = 0;
     static std::uint32_t totalFrameCount = 0;
