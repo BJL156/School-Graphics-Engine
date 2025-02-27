@@ -2,6 +2,12 @@
 
 This program is meant to push just how far you can go with CodeHS - a programming website that my school uses.
 
+### Dev logs
+[BJL156 On Youtube](https://www.youtube.com/@brayjl156)
+
+### Current state (high resolution render)
+![image](https://github.com/user-attachments/assets/f7021da2-2f59-4e39-ad36-a48524da4455)
+
 ### How to run
 Clone the repo using the following command then change directories into it:
 ```
