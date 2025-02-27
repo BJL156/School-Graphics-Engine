@@ -27,8 +27,15 @@ Or in Windows:
 .\a.exe
 ```
 
-### Why would I do this
+### FAQ
+#### Why would I do this?
 I get bored in school, so I like to mess around with some code. But my school's stinking chromebook doesn't let me run code directly on it for "security" reasons (likely story). This means that coding classes must use a website in order to compile and run code. This is where CodeHS comes in, and as revenge from not allowing me to run my code on the chromebook, I want to push CodeHS to its limits.
+
+#### How am I displaying the graphics?
+I am printing out a rectangle, and using ANSI escape codes, I change the background color of each space to whatever I want.
+
+#### Why is all of the code in the root directory?
+Currently, CodeHS doesn't allow me to have directories for the source code because, I CodeHS doesn't use my updated Makefile, and they just stick to their very basic one that doesn't accomendate for other directories.
 
 ### A (very) high level overview
 Currently the program works by outputting a generated image to the console. It does this using ANSI escape codes, so by printing a rectangle of spaces I use these codes in order to change each space to whatever color I want. With the ability to have a rectangle where I can change tiny squares to whatever color I want, my plans can take into effect. So here is the basics on how I render:
