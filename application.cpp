@@ -1,81 +1,122 @@
 #include "application.h"
 
-// libs to eventually remove
 #include <cmath>
 #include <chrono>
 
-Vec3 vertexShader(const Vec3 &vertex, const UniformBuffer &uniformBuffer) {
-    Vec3 position = uniformBuffer.projMat * uniformBuffer.modelMat * vertex;
+namespace brayjl {
+    Vec3 vertexShader(const Vec3 &vertex, const UniformBuffer &uniformBuffer) {
+        Vec3 position = uniformBuffer.projMat * uniformBuffer.modelMat * vertex;
 
-    return position;
-}
+        return position;
+    }
 
-Vec3 fragmentShader(const Vec3 &barycentric, const Vec3 &fragPos, const UniformBuffer &uniformBuffer) {
-    Vec3 fragColor{ barycentric };
+    Vec3 fragmentShader(const Vec3 &barycentric, const Vec3 &fragPos, const UniformBuffer &uniformBuffer) {
+        double u = clamp(barycentric.x * 0.0 + barycentric.y * 1.0 + barycentric.z * 0.0, 0.0, 1.0);
+        double v = clamp(barycentric.x * 0.0 + barycentric.y * 0.0 + barycentric.z * 1.0, 0.0, 1.0);
 
-    return fragColor;
-}
+        int textureX = static_cast<int>(u * uniformBuffer.texture.width);
+        int textureY = static_cast<int>(v * uniformBuffer.texture.height);
 
-Application::Application() {
-    printWelcomeMessage(m_framebuffer);
-}
+        Vec3 finalColor = uniformBuffer.texture.pixels[textureY * uniformBuffer.texture.width + textureX];
 
-Application::~Application() {
+        return finalColor;
+    }
 
-}
+    double getDeltaTime() {
+        static auto previousFrameTime = std::chrono::high_resolution_clock::now();
+        auto currentFrameTime = std::chrono::high_resolution_clock::now();
 
-void Application::run() {
-    std::vector<Vec3> vertices = {
-        {  0.0,  0.5, 0.0, },
-        { -0.5, -0.5, 0.0, },
-        {  0.5, -0.5, 0.0, }
-    };
+        std::chrono::duration<double> duration = currentFrameTime - previousFrameTime;
+        double deltaTime = duration.count();
 
-    std::uint32_t frameCount = 0;
-    while (true) {
-        m_framebuffer.clear();
+        previousFrameTime = currentFrameTime;
 
-        Mat4 modelMat = getModelMat(
-            { 0.0, 0.0, -2.0 },
-            { 1.0 },
-            { 0.0, 0.1 * frameCount, 0.1 * frameCount });
-        Mat4 projMat = perspective(
-            deg2rad(45.0),
-            static_cast<double>(m_framebuffer.getWidth()) / m_framebuffer.getHeight(),
-            0.01,
-            100.0);
+        return deltaTime;
+    }
 
-        UniformBuffer uniformBuffer{
-            m_framebuffer.getWidth(),
-            m_framebuffer.getHeight(),
-            frameCount,
-            modelMat,
-            projMat
+    Application::Application() {
+
+    }
+
+    Application::~Application() {
+
+    }
+
+    void Application::run() {
+        printWelcomeMessage(m_framebuffer);
+        clearTerminal();
+
+        std::string textureFilepath = "resources/texture.ppm";
+        std::cout << "Loading texture: " << textureFilepath << "...\n";
+        Texture texture = readPPM(textureFilepath);
+        std::cout << "Successfully loaded texture: " << textureFilepath << '\n';
+
+        std::vector<Vec3> vertices = {
+            {  0.0,  0.5, 0.0, },
+            { -0.5, -0.5, 0.0, },
+            {  0.5, -0.5, 0.0, }
         };
-        frameCount++;
-
-        m_rasterizer.drawTriangle(
-            vertices,
-            vertexShader,
-            fragmentShader,
-            uniformBuffer);
-
-        modelMat = getModelMat(
-            { -0.3, 0.0, -3.0 },
-            { 1.0 },
-            { 0.1 * frameCount, 0.0, 0.0 });
-        uniformBuffer.modelMat = modelMat;
-        m_rasterizer.drawTriangle(
-            vertices,
-            vertexShader,
-            fragmentShader,
-            uniformBuffer);
 
         clearTerminal();
-        m_framebuffer.present();
+        std::cout << "\033[?25l";
 
-        printDebugMessage();
+        double rotationSpeed = 2.5;
+        double tri0Angle = 0.0;
+        double tri1Angle = 0.0;
 
-        std::cin.get();
+        std::uint32_t frameCount = 0;
+        while (true) {
+            double deltaTime = getDeltaTime();
+
+            tri0Angle += rotationSpeed * deltaTime;
+            tri1Angle += rotationSpeed * deltaTime;
+
+            m_framebuffer.clear();
+
+            Mat4 modelMat = getModelMat(
+                { 0.0, 0.0, -2.0 },
+                { 1.0 },
+                { 0.0, tri0Angle, tri0Angle });
+            Mat4 projMat = perspective(
+                deg2rad(45.0),
+                static_cast<double>(m_framebuffer.getWidth()) / m_framebuffer.getHeight(),
+                0.01,
+                100.0);
+
+            UniformBuffer uniformBuffer{
+                m_framebuffer.getWidth(),
+                m_framebuffer.getHeight(),
+                frameCount,
+                modelMat,
+                projMat,
+                texture
+            };
+            frameCount++;
+
+            m_rasterizer.drawTriangle(
+                vertices,
+                vertexShader,
+                fragmentShader,
+                uniformBuffer);
+
+            modelMat = getModelMat(
+                { -0.3, 0.0, -3.0 },
+                { 1.0 },
+                { tri1Angle, 0.0, 0.0 });
+            uniformBuffer.modelMat = modelMat;
+            m_rasterizer.drawTriangle(
+                vertices,
+                vertexShader,
+                fragmentShader,
+                uniformBuffer);
+
+            std::cout << "\033[1;1H";
+            m_framebuffer.present();
+
+            std::cout << '\n';
+            printDebugMessage();
+        }
+
+        std::cout << "\033[?25h";
     }
 }

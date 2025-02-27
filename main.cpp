@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 int main(void) {
-    Application application{};
+    brayjl::Application application{};
     try {
         application.run();
     }

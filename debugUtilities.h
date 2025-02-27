@@ -7,8 +7,10 @@
 #include <cstdint>
 #include <chrono>
 
-void printWelcomeMessage(const Framebuffer &framebuffer);
+namespace brayjl {
+    void printWelcomeMessage(const Framebuffer &framebuffer);
 
-void printDebugMessage();
+    void printDebugMessage();
+}
 
 #endif

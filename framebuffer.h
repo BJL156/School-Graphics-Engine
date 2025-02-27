@@ -10,39 +10,41 @@
 #include <string>
 #include <iostream>
 
-class Framebuffer {
-public:
-    Framebuffer(
-        const std::uint32_t &width,
-        double aspectRatio);
-    ~Framebuffer();
+namespace brayjl {
+    class Framebuffer {
+    public:
+        Framebuffer(
+            const std::uint32_t &width,
+            double aspectRatio);
+        ~Framebuffer();
 
-    void setPixel(
-        const std::uint32_t &x,
-        const std::uint32_t &y,
-        const Vec3 &color,
-        double depth);
+        void setPixel(
+            const std::uint32_t &x,
+            const std::uint32_t &y,
+            const Vec3 &color,
+            double depth);
 
-    void clear();
-    void present();
+        void clear();
+        void present();
 
-    const std::uint32_t getWidth() const;
-    const std::uint32_t getHeight() const;
-private:
-    void createColorAttachment(const std::uint32_t &pixelCount);
-    void createDepthBuffer(const std::uint32_t &pixelCount);
+        const std::uint32_t getWidth() const;
+        const std::uint32_t getHeight() const;
+    private:
+        void createColorAttachment(const std::uint32_t &pixelCount);
+        void createDepthBuffer(const std::uint32_t &pixelCount);
 
-    std::uint32_t getCorrectedHeight(
-        const std::uint32_t &width,
-        double aspectRatio);
+        std::uint32_t getCorrectedHeight(
+            const std::uint32_t &width,
+            double aspectRatio);
 
-    const std::uint32_t m_width;
-    const std::uint32_t m_height;
+        const std::uint32_t m_width;
+        const std::uint32_t m_height;
 
-    Vec3 m_clearColor = { 0.1, 0.1, 0.1 };
+        Vec3 m_clearColor = { 0.1, 0.1, 0.1 };
 
-    std::vector<Vec3> m_colorAttachment;
-    std::vector<double> m_depthBuffer;
-};
+        std::vector<Vec3> m_colorAttachment;
+        std::vector<double> m_depthBuffer;
+    };
+}
 
 #endif

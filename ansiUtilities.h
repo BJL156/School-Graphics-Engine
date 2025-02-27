@@ -7,10 +7,12 @@
 #include <string>
 #include <iostream>
 
-std::string getAnsiString(const Vec3 &color);
+namespace brayjl {
+    std::string getAnsiString(const Vec3 &color);
 
-void resetTerminal();
+    void resetTerminal();
 
-void clearTerminal();
+    void clearTerminal();
+}
 
 #endif
