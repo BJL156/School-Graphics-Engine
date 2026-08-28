@@ -29,22 +29,3 @@ Run the compiled binary:
 # Windows
 .\graphics_engine.out
 ```
-
-### How to run
-Clone the repo using the following command then change directories into it:
-```
-git clone https://github.com/BJL156/School-Graphics-Engine/
-cd School-Graphics-Engine
-```
-Then just compile all of the files and running the program. You can either use VS2022 or here's an example using g++:
-```
-g++ *.cpp
-```
-Then run the program. Here is an example assuming you ran the g++ command above in Linux:
-```
-./a.out
-```
-Or in Windows:
-```
-.\a.exe
-```
