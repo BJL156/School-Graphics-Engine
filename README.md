@@ -7,7 +7,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20CodeHS-lightgrey.svg)](https://codehs.com/)
 ![Renderer](https://img.shields.io/badge/renderer-ANSI%20Terminal-orange.svg)
 
-A custom software graphics engine built to push CodeHS (a restricted school programming platform) to its absolute limits. It renders 3D graphics directly inside the console using ANSI escape sequences and double-space pixel blocks.
+A custom software graphics engine made from scratch that was built to push CodeHS (a restricted school programming platform) to its absolute limits. It renders 3D graphics directly inside the console using ANSI escape sequences and double-space pixel blocks.
 
 This project is the original precursor that inspired [Mini Raster 3D](https://github.com/BJL156/Mini-Raster-3D).
 
