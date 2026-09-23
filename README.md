@@ -17,18 +17,18 @@ This project is the original precursor that inspired [Mini Raster 3D](https://gi
 ## Build
 Clone the repository and change into its directory:
 ```bash
-git clone [https://github.com/BJL156/School-Graphics-Engine/](https://github.com/BJL156/School-Graphics-Engine/)
+git clone https://github.com/BJL156/School-Graphics-Engine
 cd School-Graphics-Engine
 ```
-Compile all of the files together:
+Due to CodeHS limitations, use GCC to compile all of the files together:
 ```bash
 g++ *.cpp -o graphics_engine.out
 ```
 Run the compiled binary:
 ```
-# Linux
+# Linux:
 ./graphics_engine.out
 
-# Windows
+# Windows:
 .\graphics_engine.out
 ```
