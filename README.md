@@ -29,6 +29,6 @@ Run the compiled binary:
 # Linux:
 ./graphics_engine.out
 
-# Windows:
-.\graphics_engine.out
+# Windows (-o graphics_engine.exe):
+.\graphics_engine.exe
 ```
